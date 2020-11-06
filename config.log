@@ -1,0 +1,592 @@
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -Wall ... 
+scons: Configure: ".sconf_temp/conftest_0.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_0.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_0.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CC   .sconf_temp/conftest_0.o
+  |
+scons: Configure: ".sconf_temp/conftest_0" is up to date.
+scons: Configure: The original builder output was:
+  |  LD   .sconf_temp/conftest_0
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -Wextra ... 
+scons: Configure: ".sconf_temp/conftest_1.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_1.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_1.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CC   .sconf_temp/conftest_1.o
+  |
+scons: Configure: ".sconf_temp/conftest_1" is up to date.
+scons: Configure: The original builder output was:
+  |  LD   .sconf_temp/conftest_1
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -nostdinc ... 
+scons: Configure: ".sconf_temp/conftest_2.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_2.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_2.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CC   .sconf_temp/conftest_2.o
+  |
+scons: Configure: ".sconf_temp/conftest_2" is up to date.
+scons: Configure: The original builder output was:
+  |  LD   .sconf_temp/conftest_2
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -fno-stack-protector ... 
+scons: Configure: ".sconf_temp/conftest_3.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_3.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_3.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CC   .sconf_temp/conftest_3.o
+  |
+scons: Configure: ".sconf_temp/conftest_3" is up to date.
+scons: Configure: The original builder output was:
+  |  LD   .sconf_temp/conftest_3
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -fno-builtin ... 
+scons: Configure: ".sconf_temp/conftest_4.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_4.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_4.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CC   .sconf_temp/conftest_4.o
+  |
+scons: Configure: ".sconf_temp/conftest_4" is up to date.
+scons: Configure: The original builder output was:
+  |  LD   .sconf_temp/conftest_4
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -fno-pie ... 
+scons: Configure: ".sconf_temp/conftest_5.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_5.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_5.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CC   .sconf_temp/conftest_5.o
+  |
+scons: Configure: ".sconf_temp/conftest_5" is up to date.
+scons: Configure: The original builder output was:
+  |  LD   .sconf_temp/conftest_5
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -Wno-write-strings ... 
+scons: Configure: ".sconf_temp/conftest_6.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_6.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_6.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CC   .sconf_temp/conftest_6.o
+  |
+scons: Configure: ".sconf_temp/conftest_6" is up to date.
+scons: Configure: The original builder output was:
+  |  LD   .sconf_temp/conftest_6
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -Wno-unused-parameter ... 
+scons: Configure: ".sconf_temp/conftest_7.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_7.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_7.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CC   .sconf_temp/conftest_7.o
+  |
+scons: Configure: ".sconf_temp/conftest_7" is up to date.
+scons: Configure: The original builder output was:
+  |  LD   .sconf_temp/conftest_7
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -Wno-ignored-qualifiers ... 
+scons: Configure: ".sconf_temp/conftest_8.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_8.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_8.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CC   .sconf_temp/conftest_8.o
+  |
+scons: Configure: ".sconf_temp/conftest_8" is up to date.
+scons: Configure: The original builder output was:
+  |  LD   .sconf_temp/conftest_8
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -Wno-pragmas ... 
+scons: Configure: ".sconf_temp/conftest_9.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_9.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_9.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CC   .sconf_temp/conftest_9.o
+  |
+scons: Configure: ".sconf_temp/conftest_9" is up to date.
+scons: Configure: The original builder output was:
+  |  LD   .sconf_temp/conftest_9
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -Wno-cast-function-type ... 
+scons: Configure: ".sconf_temp/conftest_10.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_10.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_10.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CC   .sconf_temp/conftest_10.o
+  |
+scons: Configure: ".sconf_temp/conftest_10" is up to date.
+scons: Configure: The original builder output was:
+  |  LD   .sconf_temp/conftest_10
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -Wno-format-truncation ... 
+scons: Configure: ".sconf_temp/conftest_11.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_11.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_11.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CC   .sconf_temp/conftest_11.o
+  |
+scons: Configure: ".sconf_temp/conftest_11" is up to date.
+scons: Configure: The original builder output was:
+  |  LD   .sconf_temp/conftest_11
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -g3 ... 
+scons: Configure: ".sconf_temp/conftest_12.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_12.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_12.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CC   .sconf_temp/conftest_12.o
+  |
+scons: Configure: ".sconf_temp/conftest_12" is up to date.
+scons: Configure: The original builder output was:
+  |  LD   .sconf_temp/conftest_12
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -O0 ... 
+scons: Configure: ".sconf_temp/conftest_13.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_13.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_13.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CC   .sconf_temp/conftest_13.o
+  |
+scons: Configure: ".sconf_temp/conftest_13" is up to date.
+scons: Configure: The original builder output was:
+  |  LD   .sconf_temp/conftest_13
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -D__ASSERT__ ... 
+scons: Configure: ".sconf_temp/conftest_14.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_14.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_14.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CC   .sconf_temp/conftest_14.o
+  |
+scons: Configure: ".sconf_temp/conftest_14" is up to date.
+scons: Configure: The original builder output was:
+  |  LD   .sconf_temp/conftest_14
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 106:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -fno-rtti ... 
+scons: Configure: ".sconf_temp/conftest_15.cpp" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_15.cpp <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_15.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CXX  .sconf_temp/conftest_15.o
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 106:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -fno-exceptions ... 
+scons: Configure: ".sconf_temp/conftest_16.cpp" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_16.cpp <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_16.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CXX  .sconf_temp/conftest_16.o
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 106:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -fno-sized-deallocation ... 
+scons: Configure: ".sconf_temp/conftest_17.cpp" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_17.cpp <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_17.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CXX  .sconf_temp/conftest_17.o
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 106:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -Wno-unknown-pragmas ... 
+scons: Configure: ".sconf_temp/conftest_18.cpp" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_18.cpp <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_18.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CXX  .sconf_temp/conftest_18.o
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 106:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -std=c++03 ... 
+scons: Configure: ".sconf_temp/conftest_19.cpp" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_19.cpp <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_19.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CXX  .sconf_temp/conftest_19.o
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 106:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -ffunction-sections ... 
+scons: Configure: ".sconf_temp/conftest_20.cpp" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_20.cpp <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_20.o" is up to date.
+scons: Configure: The original builder output was:
+  |  CXX  .sconf_temp/conftest_20.o
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -Wall ... 
+scons: Configure: ".sconf_temp/conftest_21.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_21.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_21.o" is up to date.
+scons: Configure: The original builder output was:
+  |  HOSTCC   .sconf_temp/conftest_21.o
+  |
+scons: Configure: ".sconf_temp/conftest_21" is up to date.
+scons: Configure: The original builder output was:
+  |  HOSTLD   .sconf_temp/conftest_21
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -Wextra ... 
+scons: Configure: ".sconf_temp/conftest_22.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_22.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_22.o" is up to date.
+scons: Configure: The original builder output was:
+  |  HOSTCC   .sconf_temp/conftest_22.o
+  |
+scons: Configure: ".sconf_temp/conftest_22" is up to date.
+scons: Configure: The original builder output was:
+  |  HOSTLD   .sconf_temp/conftest_22
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -Wno-unused-parameter ... 
+scons: Configure: ".sconf_temp/conftest_23.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_23.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_23.o" is up to date.
+scons: Configure: The original builder output was:
+  |  HOSTCC   .sconf_temp/conftest_23.o
+  |
+scons: Configure: ".sconf_temp/conftest_23" is up to date.
+scons: Configure: The original builder output was:
+  |  HOSTLD   .sconf_temp/conftest_23
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -Wno-ignored-qualifiers ... 
+scons: Configure: ".sconf_temp/conftest_24.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_24.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_24.o" is up to date.
+scons: Configure: The original builder output was:
+  |  HOSTCC   .sconf_temp/conftest_24.o
+  |
+scons: Configure: ".sconf_temp/conftest_24" is up to date.
+scons: Configure: The original builder output was:
+  |  HOSTLD   .sconf_temp/conftest_24
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -Wno-format-truncation ... 
+scons: Configure: ".sconf_temp/conftest_25.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_25.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_25.o" is up to date.
+scons: Configure: The original builder output was:
+  |  HOSTCC   .sconf_temp/conftest_25.o
+  |
+scons: Configure: ".sconf_temp/conftest_25" is up to date.
+scons: Configure: The original builder output was:
+  |  HOSTLD   .sconf_temp/conftest_25
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -Wno-pragmas ... 
+scons: Configure: ".sconf_temp/conftest_26.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_26.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_26.o" is up to date.
+scons: Configure: The original builder output was:
+  |  HOSTCC   .sconf_temp/conftest_26.o
+  |
+scons: Configure: ".sconf_temp/conftest_26" is up to date.
+scons: Configure: The original builder output was:
+  |  HOSTLD   .sconf_temp/conftest_26
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -g3 ... 
+scons: Configure: ".sconf_temp/conftest_27.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_27.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_27.o" is up to date.
+scons: Configure: The original builder output was:
+  |  HOSTCC   .sconf_temp/conftest_27.o
+  |
+scons: Configure: ".sconf_temp/conftest_27" is up to date.
+scons: Configure: The original builder output was:
+  |  HOSTLD   .sconf_temp/conftest_27
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -O0 ... 
+scons: Configure: ".sconf_temp/conftest_28.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_28.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_28.o" is up to date.
+scons: Configure: The original builder output was:
+  |  HOSTCC   .sconf_temp/conftest_28.o
+  |
+scons: Configure: ".sconf_temp/conftest_28" is up to date.
+scons: Configure: The original builder output was:
+  |  HOSTLD   .sconf_temp/conftest_28
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 56:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -D__ASSERT__ ... 
+scons: Configure: ".sconf_temp/conftest_29.c" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_29.c <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_29.o" is up to date.
+scons: Configure: The original builder output was:
+  |  HOSTCC   .sconf_temp/conftest_29.o
+  |
+scons: Configure: ".sconf_temp/conftest_29" is up to date.
+scons: Configure: The original builder output was:
+  |  HOSTLD   .sconf_temp/conftest_29
+  |
+scons: Configure: (cached) yes
+
+
+file ./support/scons/autoconf.py,line 106:
+	Configure(confdir = .sconf_temp)
+scons: Configure: Checking for -std=c++03 ... 
+scons: Configure: ".sconf_temp/conftest_30.cpp" is up to date.
+scons: Configure: The original builder output was:
+  |.sconf_temp/conftest_30.cpp <-
+  |  |int main(int argc, char **argv){    return 0;}
+  |  |
+  |
+scons: Configure: ".sconf_temp/conftest_30.o" is up to date.
+scons: Configure: The original builder output was:
+  |  HOSTCXX  .sconf_temp/conftest_30.o
+  |
+scons: Configure: (cached) yes
+
+
