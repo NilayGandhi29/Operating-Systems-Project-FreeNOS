@@ -16,6 +16,11 @@
  */
 
 
+
+/**
+ * Array of items as a First-In-First-Out (FIFO) datastructure.
+ */
+
 /**
  * @addtogroup lib
  * @{
@@ -24,15 +29,12 @@
  * @{
  */
 
-/**
- * Array of items as a First-In-First-Out (FIFO) datastructure.
- */
-
-
-    
+#include <Log.h>    
+#include "PriorityProcessQueue.h"
     /**
      * Default constructor
      */
+    
     PriorityProcessQueue::PriorityProcessQueue()
     {
         clear();
@@ -48,7 +50,7 @@
     
 
 
-    bool PriorityProcessQueue::push(Process *p){
+    bool PriorityProcessQueue::push(Process* p){
         if (m_tail >= N - 1)
         {
             NOTICE("Queue overflow no more elements can be inserted");
@@ -59,17 +61,17 @@
             m_head++;
             m_tail++;
             m_count++;
-            m_array[m_tail] = item;
+            m_array[m_tail] = p;
             return;
         }    
         else{
-            check(item);
+            check(p);
         }
         m_tail++;
         m_count++;
     }
 
-    void PriorityProcessQueue::check(Process *p)
+    void PriorityProcessQueue::check(Process* p)
     {
         uint i,j;
      
@@ -98,7 +100,7 @@
     
 
 
-    Process * PriorityProcessQueue::pop(){
+    Process* PriorityProcessQueue::pop(){
         uint idx = m_tail;
         m_tail--;
         m_count--;
@@ -106,7 +108,7 @@
         return m_array[idx];
     }
 
-    Process * PriorityProcessQueue::remove(Process *p){
+    void PriorityProcessQueue::remove(Process* p){
         uint i;
  
         if ((m_head==-1) && (m_tail==-1))
@@ -117,7 +119,7 @@
      
         for (i = 0; i <= m_tail; i++)
         {
-            if (item == m_array[i])
+            if (p == m_array[i])
             {
                 for (; i < m_tail; i++)
                 {
@@ -133,7 +135,7 @@
             return;
             }
         }
-        NOTICE("Not found in queue to delete: " << item);
+        NOTICE("Not found in queue to delete: " << p);
     }
 
     
@@ -147,11 +149,11 @@
      *
      * @return True if the item exists, false otherwise
      */
-    bool PriorityProcessQueue::contains(Process *p) const
+    bool PriorityProcessQueue::contains(Process* p) const
     {
         for (Size i = 0; i < m_count; i++)
         {
-            if (m_array[(m_tail + i) % N] == item)
+            if (m_array[(m_tail + i) % N] == p)
                 return true;
         }
 
@@ -170,7 +172,7 @@
     /**
      * Removes all items from the Queue.
      */
-    virtual void PriorityProcessQueue::clear()
+    void PriorityProcessQueue::clear()
     {
         m_head = 0;
         m_tail = 0;
@@ -182,7 +184,7 @@
      *
      * @return size The maximum size of the Queue.
      */
-    virtual Size PriorityProcessQueue::size() const
+    Size PriorityProcessQueue::size() const
     {
         return N;
     }
@@ -192,7 +194,7 @@
      *
      * @return Number of items in the Queue.
      */
-    virtual Size PriorityProcessQueue::count() const
+    Size PriorityProcessQueue::count() const
     {
         return m_count;
     }
