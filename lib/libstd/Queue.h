@@ -21,7 +21,7 @@
 #include "Types.h"
 #include "Macros.h"
 #include "Container.h"
-
+#include "Process.h"
 /**
  * @addtogroup lib
  * @{
@@ -36,7 +36,7 @@
 template <class T, Size N> class Queue : public Container
 {
   public:
-    int m_array[N];
+    
     /**
      * Default constructor
      */
@@ -87,8 +87,12 @@ template <class T, Size N> class Queue : public Container
     }
 
 
+    uint get_m_tail(){
+        return m_tail;
+    }
 
 
+    
 
     /**
      * Look if an item exists on the Queue
