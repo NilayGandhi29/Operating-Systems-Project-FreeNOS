@@ -18,6 +18,7 @@
 #include <Log.h>
 #include "Kernel.h"
 #include "Scheduler.h"
+// #include "PriorityProcessQueueNew.h"
 
 Scheduler::Scheduler()
 {
@@ -40,8 +41,9 @@ Scheduler::Result Scheduler::enqueue(Process *proc, bool ignoreState)
         ERROR("process ID " << proc->getID() << " not in Ready state");
         return InvalidArgument;
     }
-
-    m_queue.push(proc);
+    NOTICE("Scheduler proc->getID: "<<(ProcessID) proc->getID()<<"\n");
+    m_queue.push(proc->getID(),proc->m_count);
+    process_queue[m_queue.count()-1]=proc;
     return Success;
 }
 
@@ -59,12 +61,20 @@ Scheduler::Result Scheduler::dequeue(Process *proc, bool ignoreState)
     // Traverse the Queue to remove the Process
     for (Size i = 0; i < count; i++)
     {
-        Process *p = m_queue.pop();
-
-        if (p == proc)
+        // Process *p = m_queue.pop();
+        ProcessID pid_peep=m_queue.peep();
+        uint m_count_pid=m_queue.get_m_count(pid_peep);
+        ProcessID pid= m_queue.pop();
+        Process* p=process_queue.pop();
+        
+        if (pid == proc->getID())
             return Success;
-        else
-            m_queue.push(p);
+        else{
+            m_queue.push(pid, m_count_pid);
+            process_queue[m_queue.count()-1]=p;
+        }
+            
+
     }
 
     FATAL("process ID " << proc->getID() << " is not in the schedule");
@@ -77,13 +87,44 @@ Process * Scheduler::select()
     if (m_queue.count() > 0)
     {
         // NOTICE("##############inside Scheduler::select()");
-        Process *p = m_queue.pop();
-        // NOTICE("#############P_count: " << p->m_count);
-        p->m_count++;
-        m_queue.push(p);
+        m_queue.printQueue();
 
+        ProcessID pid_peep=m_queue.peep();
+        uint m_count_pid=m_queue.get_m_count(pid_peep);
+        
+        ProcessID pid = m_queue.pop();
+
+        NOTICE("pid: " << pid <<"\n");
+
+        Process* p=process_queue.getValue(pid);
+
+        // Process* p = process_queue.pop();
+
+        NOTICE("Process State: "<< (uint) p->getState()<<"\n");
+        NOTICE("p->getID(): " << p->getID()<<"\n");
+        // NOTICE("#############P_count: " << p->m_count);
+        NOTICE("m_count_pid: "<<m_count_pid<<"\n");
+        NOTICE("Before p->m_count: " << p->m_count<<"\n");
+
+        p->m_count++;
+        // m_count_pid++;
+        m_queue.push(p->getID(), p->m_count);
+        process_queue.push(p);
+
+        m_queue.printQueue();
+        
         return p;
     }
 
     return (Process *) NULL;
+}
+
+Process* getValue(uint ind){
+    uint i;
+    for(i=0; i<=m_queue.count(); i++){
+        if(process_queue[i].getID()==ind){
+            return process_queue[i];
+        }
+    }
+    return NULL;
 }

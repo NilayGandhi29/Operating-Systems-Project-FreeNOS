@@ -24,6 +24,7 @@
 #include <Queue.h>
 #include "Process.h"
 #include "ProcessManager.h"
+#include "PriorityProcessQueueNew.h"
 
 /**
  * @addtogroup kernel
@@ -87,10 +88,14 @@ class Scheduler
      */
     Process * select();
 
+
   private:
 
     /** Contains processes ready to run */
-    PriorityProcessQueue m_queue;
+    PriorityProcessQueueNew m_queue;
+
+    //Because N=1000 is taken as convention in PriorityProcessQueueNew.h
+    Process process_queue[1000];
 };
 
 /**
