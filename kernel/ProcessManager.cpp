@@ -23,10 +23,9 @@
 #include "ProcessManager.h"
 
 ProcessManager::ProcessManager()
-    : m_procs(MAX_PROCS)
+    : m_procs()
     , m_interruptNotifyList(256)
 {
-    //WARNING("##############inside ProcessManager::ProcessManager");
     DEBUG("m_procs = " << MAX_PROCS);
 
     m_scheduler = new Scheduler();
@@ -37,71 +36,95 @@ ProcessManager::ProcessManager()
 
 ProcessManager::~ProcessManager()
 {
-    //WARNING("##############inside ProcessManager::~ProcessManager");
     if (m_scheduler != NULL)
     {
-        //WARNING("##############inside if (m_scheduler != NULL)");
         delete m_scheduler;
     }
 }
-//WARNING("##############creating ProcessManager::create");
+
 Process * ProcessManager::create(const Address entry,
                                  const MemoryMap &map,
                                  const bool readyToRun,
                                  const bool privileged)
 {
-    Process *proc = new Arch::Process(m_procs.count(), entry, privileged, map);
+    Size pid = 0;
 
-    // Insert to the process table
-    if (proc && proc->initialize() == Process::Success)
+    // Insert a dummy to determine the next available PID
+    if (!m_procs.insert(pid, (Process *) ~ZERO))
     {
-        //WARNING("##############creating if (proc && proc->initialize() == Process::Success)");
-        m_procs.insert(proc);
-
-        if (readyToRun)
-        {
-            wakeup(proc);
-        }
-
-        if (m_current != 0)
-            proc->setParent(m_current->getID());
-
-        return proc;
+        return ZERO;
     }
-    return ZERO;
+
+    // Create the new Process
+    Process *proc = new Arch::Process(pid, entry, privileged, map);
+    if (!proc)
+    {
+        ERROR("failed to allocate Process");
+        m_procs.remove(pid);
+        return ZERO;
+    }
+
+    // Initialize the Process
+    const Process::Result result = proc->initialize();
+    if (result != Process::Success)
+    {
+        ERROR("failed to initialize Process: result = " << (int) result);
+        m_procs.remove(pid);
+        delete proc;
+        return ZERO;
+    }
+
+    // Overwrite dummy with actual Process
+    m_procs.insertAt(pid, proc);
+
+    // Report to scheduler, if requested
+    if (readyToRun)
+    {
+        resume(proc);
+    }
+
+    // Assign parent, if any
+    if (m_current != 0)
+    {
+        proc->setParent(m_current->getID());
+    }
+
+    return proc;
 }
 
 Process * ProcessManager::get(const ProcessID id)
 {
-    //WARNING("##############inside ProcessManager::get()");
-    Process **p = (Process **) m_procs.get(id);
-    return p ? *p : ZERO;
+    return m_procs.get(id);
 }
 
 void ProcessManager::remove(Process *proc, const uint exitStatus)
 {
-    //WARNING("##############inside ProcessManager::remove()");
     if (proc == m_idle)
         m_idle = ZERO;
 
     if (proc == m_current)
         m_current = ZERO;
 
-    // Wakeup any Processes which are waiting for this Process
+    // Notify processes which are waiting for this Process
     const Size size = m_procs.size();
-
     for (Size i = 0; i < size; i++)
     {
         if (m_procs[i] != ZERO &&
             m_procs[i]->getState() == Process::Waiting &&
             m_procs[i]->getWait() == proc->getID())
         {
-            m_procs[i]->setWaitResult(exitStatus);
-
-            const Result result = wakeup(m_procs[i]);
-            if (result != Success)
+            const Process::Result result = m_procs[i]->join(exitStatus);
+            if (result != Process::Success)
             {
-                FATAL("failed to wakeup PID " << m_procs[i]->getID());
+                FATAL("failed to join() PID " << m_procs[i]->getID() <<
+                      ": result = " << (int) result);
+            }
+
+            const Result r = enqueueProcess(m_procs[i]);
+            if (r != Success)
+            {
+                FATAL("failed to enqueue() PID " << m_procs[i]->getID() <<
+                      ": result = " << (int) r);
             }
         }
     }
@@ -110,7 +133,7 @@ void ProcessManager::remove(Process *proc, const uint exitStatus)
     unregisterInterruptNotify(proc);
 
     // Remove process from administration and schedule
-    m_procs[proc->getID()] = ZERO;
+    m_procs.remove(proc->getID());
 
     if (proc->getState() == Process::Ready)
     {
@@ -131,12 +154,10 @@ void ProcessManager::remove(Process *proc, const uint exitStatus)
 
 ProcessManager::Result ProcessManager::schedule()
 {
-    //WARNING("##############inside ProcessManager::Result()");
     const Timer *timer = Kernel::instance()->getTimer();
     const Size sleepTimerCount = m_sleepTimerQueue.count();
 
     // Let the scheduler select a new process
-    // NOTICE("########################Selected");
     Process *proc = m_scheduler->select();
 
     // If no process ready, let us idle
@@ -181,13 +202,11 @@ ProcessManager::Result ProcessManager::schedule()
 
 Process * ProcessManager::current()
 {
-    //WARNING("##############inside ProcessManager::current()");
     return m_current;
 }
 
 void ProcessManager::setIdle(Process *proc)
 {
-    //WARNING("##############inside ProcessManager::setIdle()");
     const Result result = dequeueProcess(proc, true);
     if (result != Success)
     {
@@ -197,18 +216,10 @@ void ProcessManager::setIdle(Process *proc)
     m_idle = proc;
 }
 
-Vector<Process *> * ProcessManager::getProcessTable()
-{
-    //WARNING("##############inside ProcessManager::getProcessTable()");
-    return &m_procs;
-}
-
 ProcessManager::Result ProcessManager::wait(Process *proc)
 {
-    //WARNING("##############inside ProcessManager::wait()");
     if (m_current->wait(proc->getID()) != Process::Success)
     {
-        //WARNING("##############inside if (m_current->wait(proc->getID()) != Process::Success)");
         ERROR("process ID " << m_current->getID() << " failed to wait");
         return IOError;
     }
@@ -216,9 +227,52 @@ ProcessManager::Result ProcessManager::wait(Process *proc)
     return dequeueProcess(m_current);
 }
 
+ProcessManager::Result ProcessManager::stop(Process *proc)
+{
+    const Process::State state = proc->getState();
+    const Process::Result result = proc->stop();
+    if (result != Process::Success)
+    {
+        ERROR("failed to stop PID " << proc->getID() << ": result = " << (int) result);
+        return IOError;
+    }
+
+    if (state == Process::Ready)
+    {
+        return dequeueProcess(proc);
+    }
+    else
+    {
+        return Success;
+    }
+}
+
+ProcessManager::Result ProcessManager::resume(Process *proc)
+{
+    const Process::Result result = proc->resume();
+    if (result != Process::Success)
+    {
+        ERROR("failed to resume PID " << proc->getID() << ": result = " << (int) result);
+        return IOError;
+    }
+
+    return enqueueProcess(proc);
+}
+
+ProcessManager::Result ProcessManager::reset(Process *proc, const Address entry)
+{
+    if (proc == m_current)
+    {
+        ERROR("cannot reset current Process");
+        return IOError;
+    }
+
+    proc->reset(entry);
+    return Success;
+}
+
 ProcessManager::Result ProcessManager::sleep(const Timer::Info *timer, const bool ignoreWakeups)
 {
-    //WARNING("##############inside ProcessManager::sleep()");
     const Process::Result result = m_current->sleep(timer, ignoreWakeups);
     switch (result)
     {
@@ -251,53 +305,44 @@ ProcessManager::Result ProcessManager::sleep(const Timer::Info *timer, const boo
 
 ProcessManager::Result ProcessManager::wakeup(Process *proc)
 {
-    //WARNING("##############inside ProcessManager::result()");
-    const Process::State state = proc->getState();
     const Process::Result result = proc->wakeup();
 
-    if (result != Process::Success)
+    switch (result)
     {
-        ERROR("failed to wakeup process ID " << proc->getID() <<
-              ": result: " << (uint) result);
-        return IOError;
-    }
+        case Process::WakeupPending:
+            return Success;
 
-    if (state != Process::Ready)
-    {
-        return enqueueProcess(proc);
-    }
-    else
-    {
-        return Success;
+        case Process::Success:
+            return enqueueProcess(proc);
+
+        default:
+            ERROR("failed to wakeup process ID " << proc->getID() <<
+                  ": result: " << (uint) result);
+            return IOError;
     }
 }
 
 ProcessManager::Result ProcessManager::raiseEvent(Process *proc, const struct ProcessEvent *event)
 {
-    //WARNING("##############inside ProcessManager::raiseEvent()");
-    const Process::State state = proc->getState();
     const Process::Result result = proc->raiseEvent(event);
 
-    if (result != Process::Success)
+    switch (result)
     {
-        ERROR("failed to raise event in process ID " << proc->getID() <<
-              ": result: " << (uint) result);
-        return IOError;
-    }
+        case Process::WakeupPending:
+            return Success;
 
-    if (state != Process::Ready)
-    {
-        return enqueueProcess(proc);
-    }
-    else
-    {
-        return Success;
+        case Process::Success:
+            return enqueueProcess(proc);
+
+        default:
+            ERROR("failed to raise event in process ID " << proc->getID() <<
+                  ": result: " << (uint) result);
+            return IOError;
     }
 }
 
 ProcessManager::Result ProcessManager::registerInterruptNotify(Process *proc, const u32 vec)
 {
-    //WARNING("##############inside ProcessManager::registerInterruptNotify()");
     // Create List if necessary
     if (!m_interruptNotifyList[vec])
     {
@@ -315,7 +360,6 @@ ProcessManager::Result ProcessManager::registerInterruptNotify(Process *proc, co
 
 ProcessManager::Result ProcessManager::unregisterInterruptNotify(Process *proc)
 {
-    //WARNING("##############inside ProcessManager::unregisterInterruptNotify()");
     // Remove the Process from all notify lists
     for (Size i = 0; i < m_interruptNotifyList.size(); i++)
     {
@@ -331,7 +375,6 @@ ProcessManager::Result ProcessManager::unregisterInterruptNotify(Process *proc)
 
 ProcessManager::Result ProcessManager::interruptNotify(const u32 vector)
 {
-    //WARNING("##############inside ProcessManager::interruptNotify()");
     List<Process *> *lst = m_interruptNotifyList[vector];
     if (lst)
     {
@@ -355,7 +398,6 @@ ProcessManager::Result ProcessManager::interruptNotify(const u32 vector)
 
 ProcessManager::Result ProcessManager::enqueueProcess(Process *proc, const bool ignoreState)
 {
-    //WARNING("##############inside ProcessManager::enqueueProcess()");
     if (m_scheduler->enqueue(proc, ignoreState) != Scheduler::Success)
     {
         ERROR("process ID " << proc->getID() << " not added to Scheduler");
@@ -371,7 +413,6 @@ ProcessManager::Result ProcessManager::enqueueProcess(Process *proc, const bool 
 
 ProcessManager::Result ProcessManager::dequeueProcess(Process *proc, const bool ignoreState) const
 {
-    //WARNING("##############inside ProcessManager::dequeueProcess()");
     if (m_scheduler->dequeue(proc, ignoreState) != Scheduler::Success)
     {
         ERROR("process ID " << proc->getID() << " not removed from Scheduler");

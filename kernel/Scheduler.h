@@ -22,9 +22,9 @@
 #include <Vector.h>
 #include <Macros.h>
 #include <Queue.h>
+#include <PriorityQueue.h>
 #include "Process.h"
 #include "ProcessManager.h"
-#include "PriorityProcessQueueNew.h"
 
 /**
  * @addtogroup kernel
@@ -88,14 +88,11 @@ class Scheduler
      */
     Process * select();
 
-
   private:
 
     /** Contains processes ready to run */
-    PriorityProcessQueueNew m_queue;
-
-    //Because N=1000 is taken as convention in PriorityProcessQueueNew.h
-    Process process_queue[1000];
+    Queue<Process *, MAX_PROCS> m_queue;
+    PriorityQueue m_pqueue;
 };
 
 /**

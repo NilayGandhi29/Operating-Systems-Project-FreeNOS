@@ -21,8 +21,8 @@
 #include <Types.h>
 #include <Macros.h>
 #include <List.h>
-#include <MemoryMap.h>
-#include <Timer.h>
+#include <../lib/libarch/MemoryMap.h>
+#include <../lib/libarch/Timer.h>
 #include "ProcessShares.h"
 
 /** @see IPCMessage.h. */
@@ -67,7 +67,8 @@ class Process
     {
         Ready,
         Sleeping,
-        Waiting
+        Waiting,
+        Stopped
     };
 
   public:
@@ -109,6 +110,8 @@ class Process
      * Get wait result
      */
     uint getWaitResult() const;
+    void up_cnt();
+    uint get_cnt();
 
     /**
      * Get process shares.
@@ -131,7 +134,6 @@ class Process
      */
     MemoryContext * getMemoryContext();
 
-
     /**
      * Get privilege.
      *
@@ -148,16 +150,6 @@ class Process
      */
     bool operator == (Process *proc);
 
-    
-
-    //#############################################33
-    /*
-    Custom function to return the number of times the process has been selected
-    */
-    uint getCount();
-    //#############################################3333
-
-
   protected:
 
     /**
@@ -169,6 +161,13 @@ class Process
      * @return Result code
      */
     virtual Result initialize();
+
+    /**
+     * Restart execution at the given entry point.
+     *
+     * @param entry Address to begin execution.
+     */
+    virtual void reset(const Address entry) = 0;
 
     /**
      * Allow the Process to run on the CPU.
@@ -204,6 +203,27 @@ class Process
     Result wait(ProcessID id);
 
     /**
+     * Complete waiting for another Process.
+     *
+     * @param result Exit code of the other process
+     */
+    virtual Result join(const uint result);
+
+    /**
+     * Stop execution of this process.
+     *
+     * @return Result code
+     */
+    Result stop();
+
+    /**
+     * Resume execution when this process is stopped.
+     *
+     * @return Result code
+     */
+    Result resume();
+
+    /**
      * Raise kernel event
      *
      * @return Result code
@@ -222,14 +242,6 @@ class Process
      */
     void setParent(ProcessID id);
 
-    /**
-     * Set wait result
-     *
-     * @param result Exit code of the other process
-     */
-    virtual void setWaitResult(uint result);
-
-
   protected:
 
     /** Process Identifier */
@@ -247,6 +259,8 @@ class Process
     /** Wait exit result of the other Process. */
     uint m_waitResult;
 
+    uint m_cnt;
+
     /** Privilege level */
     bool m_privileged;
 
@@ -261,11 +275,6 @@ class Process
 
     /** Number of wakeups received */
     Size m_wakeups;
-
-    /** My code########### counts the number of time the process is called*/
-    //######################################################################3
-    uint m_count;
-    //#####################################################################3
 
     /**
      * Sleep timer value.

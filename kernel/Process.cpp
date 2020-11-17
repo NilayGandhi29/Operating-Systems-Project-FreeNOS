@@ -20,15 +20,13 @@
 #include <MemoryBlock.h>
 #include <MemoryChannel.h>
 #include <SplitAllocator.h>
-#include <Log.h>
 #include "Process.h"
 #include "ProcessEvent.h"
 
 Process::Process(ProcessID id, Address entry, bool privileged, const MemoryMap &map)
     : m_id(id), m_map(map), m_shares(id)
 {
-	//WARNING("##############inside Process::Process");
-    m_state         = Sleeping;
+    m_state         = Stopped;
     m_parent        = 0;
     m_waitId        = 0;
     m_waitResult    = 0;
@@ -37,108 +35,87 @@ Process::Process(ProcessID id, Address entry, bool privileged, const MemoryMap &
     m_privileged    = privileged;
     m_memoryContext = ZERO;
     m_kernelChannel = ZERO;
-    m_count			= 0;
+    m_cnt           = 0;
     MemoryBlock::set(&m_sleepTimer, 0, sizeof(m_sleepTimer));
 }
-
 Process::~Process()
 {
-	//WARNING("###############inside process");
     if (m_kernelChannel)
     {
-    	//WARNING("##############inside if (m_kernelChannel)");
         delete m_kernelChannel;
     }
 
     if (m_memoryContext)
     {
-    	//WARNING("##############inside if (m_memoryContext)");
-        m_memoryContext->releaseRegion(MemoryMap::UserData);
-        m_memoryContext->releaseRegion(MemoryMap::UserHeap);
-        m_memoryContext->releaseRegion(MemoryMap::UserStack);
-        m_memoryContext->releaseRegion(MemoryMap::UserPrivate);
-        m_memoryContext->releaseRegion(MemoryMap::UserArgs);
-        m_memoryContext->releaseRegion(MemoryMap::UserShare, true);
+        m_memoryContext->releaseSection(m_map.range(MemoryMap::UserData));
+        m_memoryContext->releaseSection(m_map.range(MemoryMap::UserHeap));
+        m_memoryContext->releaseSection(m_map.range(MemoryMap::UserStack));
+        m_memoryContext->releaseSection(m_map.range(MemoryMap::UserPrivate));
+        m_memoryContext->releaseSection(m_map.range(MemoryMap::UserArgs));
+        m_memoryContext->releaseSection(m_map.range(MemoryMap::UserShare), true);
         delete m_memoryContext;
     }
 }
-
+void Process::up_cnt(){
+    m_cnt++;   
+}
+uint Process::get_cnt(){
+    return m_cnt;
+}
 ProcessID Process::getID() const
 {
-	//WARNING("##############inside Process::getID()");
     return m_id;
 }
 
 ProcessID Process::getParent() const
 {
-	//WARNING("##############inside Process::getParent()");
     return m_parent;
 }
 
 ProcessID Process::getWait() const
 {
-	//WARNING("##############inside Process::getWait()");
     return m_waitId;
 }
 
 uint Process::getWaitResult() const
 {
-	//WARNING("##############inside Process::getWaitResult()");
     return m_waitResult;
-}
-
-void Process::setWaitResult(uint result)
-{
-	//WARNING("##############inside Process::setWaitResult()");
-    m_waitResult = result;
 }
 
 Process::State Process::getState() const
 {
-	//WARNING("##############inside Process::getState()");
     return m_state;
 }
 
 ProcessShares & Process::getShares()
 {
-	//WARNING("##############inside Process::getShares()");
     return m_shares;
 }
 
 const Timer::Info & Process::getSleepTimer() const
 {
-	//WARNING("##############inside Process::getSleepTimer()");
     return m_sleepTimer;
 }
 
 MemoryContext * Process::getMemoryContext()
 {
-	//WARNING("##############inside Process::getMemoryContext()");
     return m_memoryContext;
 }
 
 bool Process::isPrivileged() const
 {
-	//WARNING("##############inside Process::isPrivileged()");
     return m_privileged;
 }
 
 void Process::setParent(ProcessID id)
 {
-	//WARNING("##############inside Process::setParent()");
     m_parent = id;
-}
-
-uint Process::getCount(){
-	return m_count;
 }
 
 Process::Result Process::wait(ProcessID id)
 {
-	//WARNING("##############inside Process::wait()");
     if (m_state != Ready)
     {
-    	//WARNING("##############inside if (m_state != Ready)()");
         ERROR("Process ID " << m_id << " has invalid state: " << (uint) m_state);
         return InvalidArgument;
     }
@@ -149,9 +126,45 @@ Process::Result Process::wait(ProcessID id)
     return Success;
 }
 
+Process::Result Process::join(const uint result)
+{
+    if (m_state != Waiting)
+    {
+        ERROR("PID " << m_id << " has invalid state: " << (uint) m_state);
+        return InvalidArgument;
+    }
+
+    m_waitResult = result;
+    m_state = Ready;
+    return Success;
+}
+
+Process::Result Process::stop()
+{
+    if (m_state != Ready && m_state != Sleeping && m_state != Stopped)
+    {
+        ERROR("PID " << m_id << " has invalid state: " << (uint) m_state);
+        return InvalidArgument;
+    }
+
+    m_state = Stopped;
+    return Success;
+}
+
+Process::Result Process::resume()
+{
+    if (m_state != Stopped)
+    {
+        ERROR("PID " << m_id << " has invalid state: " << (uint) m_state);
+        return InvalidArgument;
+    }
+
+    m_state = Ready;
+    return Success;
+}
+
 Process::Result Process::raiseEvent(const ProcessEvent *event)
 {
-	//WARNING("##############inside Process::raiseEvent()");
     // Write the message. Be sure to flush the caches because
     // the kernel has mapped the channel pages separately in low memory.
     m_kernelChannel->write(event);
@@ -163,7 +176,6 @@ Process::Result Process::raiseEvent(const ProcessEvent *event)
 
 Process::Result Process::initialize()
 {
-	//WARNING("##############inside Process::initialize()");
     Memory::Range range;
     Arch::Cache cache;
     Allocator::Range allocPhys, allocVirt;
@@ -196,7 +208,7 @@ Process::Result Process::initialize()
     range.phys   = allocPhys.address;
     range.access = Memory::User | Memory::Readable;
     range.size   = PAGESIZE * 2;
-    m_memoryContext->findFree(range.size, MemoryMap::UserPrivate, &range.virt);
+    m_memoryContext->findFree(range.size, MemoryMap::UserShare, &range.virt);
     m_memoryContext->mapRangeContiguous(&range);
 
     // Remap the feedback page with write permissions
@@ -216,30 +228,34 @@ Process::Result Process::initialize()
 
 Process::Result Process::wakeup()
 {
-	//WARNING("##############inside Process::wakeup()");
     // This process might be just about to call sleep().
     // When another process is asking to wakeup this Process
     // such that it can receive an IPC message, we must guarantee
     // that the next sleep will be skipped.
     m_wakeups++;
-    m_state = Ready;
-    MemoryBlock::set(&m_sleepTimer, 0, sizeof(m_sleepTimer));
 
-    return Success;
+    if (m_state == Sleeping)
+    {
+        m_state = Ready;
+        MemoryBlock::set(&m_sleepTimer, 0, sizeof(m_sleepTimer));
+        return Success;
+    }
+    else
+    {
+        return WakeupPending;
+    }
 }
 
 Process::Result Process::sleep(const Timer::Info *timer, bool ignoreWakeups)
 {
-	//WARNING("##############inside Process::sleep()");
     if (m_state != Ready)
     {
-        ERROR("Process ID " << m_id << " has invalid state: " << (uint) m_state);
+        ERROR("PID " << m_id << " has invalid state: " << (uint) m_state);
         return InvalidArgument;
     }
 
     if (!m_wakeups || ignoreWakeups)
     {
-    	//WARNING("##############inside if (!m_wakeups || ignoreWakeups)");
         m_state = Sleeping;
 
         if (timer)
@@ -253,6 +269,5 @@ Process::Result Process::sleep(const Timer::Info *timer, bool ignoreWakeups)
 
 bool Process::operator==(Process *proc)
 {
-	//WARNING("##############inside Process::operator()");
     return proc->getID() == m_id;
 }
